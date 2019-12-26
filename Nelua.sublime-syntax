@@ -183,7 +183,8 @@ contexts:
     - include: else-pop
 
   variable-type-suffix:
-    - match: '(?=:)'
+    - match: '[:]'
+      scope: punctuation.accessor.lua
       push: type-expression
     - match: '(?=\<)'
       scope: variable.annotation
@@ -434,6 +435,10 @@ contexts:
         - include: array-index-accessor
         - include: table-constructor
         - include: string
+        - match: (?={{function_args_begin}})
+          push:
+            - function-arguments-meta
+            - function-arguments
         - match: '\*'
           scope: keyword.operator.pointer.lua
         - include: else-pop
