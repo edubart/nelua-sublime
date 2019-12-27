@@ -114,6 +114,9 @@ contexts:
     - match: break{{identifier_break}}
       scope: keyword.control.break.lua
 
+    - match: continue{{identifier_break}}
+      scope: keyword.control.break.lua
+
     - match: return{{identifier_break}}
       scope: keyword.control.return.lua
       push: expression-list
