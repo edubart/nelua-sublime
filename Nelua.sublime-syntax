@@ -73,45 +73,48 @@ contexts:
           pop: true
     - match: '(?=##\[=*\[)'
       push:
+        - meta_include_prototype: false
+        - meta_scope: diff.inserted
         - match: '##\[(=*)\['
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           embed: scope:source.nelua
-          embed_scope: diff.inserted markup.raw
           escape: (?=\]\1\])
         - match: \]=*\]
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           pop: true
     - match: '(?=#\[)'
       push:
+        - meta_include_prototype: false
+        - meta_scope: diff.inserted
         - match: '#\['
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           embed: scope:source.nelua
-          embed_scope: diff.inserted markup.raw
           escape: '(?=\]#)'
         - match: '\]#'
-          scope: diff.inserted markup.raw markup.inserted
-          pop: true
-    - match: '(?=#\()'
-      push:
-        - match: '#\('
-          scope: diff.inserted markup.raw markup.inserted
-          embed: scope:source.nelua
-          embed_scope: diff.inserted markup.raw
-          escape: '(?=\)#)'
-        - match: '\)#'
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           pop: true
     - match: '(?=##)'
       push:
+        - meta_include_prototype: false
+        - meta_scope: diff.inserted
         - match: '##'
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           embed: scope:source.nelua
-          embed_scope: diff.inserted markup.raw
           escape: (?=\n)
         - match: \n
-          scope: diff.inserted markup.raw markup.inserted
+          scope: markup.inserted
           pop: true
-
+    - match: '(?=#\()'
+      push:
+        - meta_include_prototype: false
+        - meta_scope: diff.inserted
+        - match: '#\('
+          scope: markup.inserted
+          embed: scope:source.nelua
+          escape: '(?=\)#)'
+        - match: '\)#'
+          scope: markup.inserted
+          pop: true
   end:
     - match: end{{identifier_break}}
       scope: keyword.control.end.lua
@@ -140,7 +143,7 @@ contexts:
       scope: keyword.control.break.lua
 
     - match: continue{{identifier_break}}
-      scope: keyword.control.break.lua
+      scope: keyword.control.continue.lua
 
     - match: return{{identifier_break}}
       scope: keyword.control.return.lua
@@ -154,20 +157,8 @@ contexts:
       scope: storage.modifier.lua keyword.control.global.lua
       push: typed-declaration-list
 
-    - match: else{{identifier_break}}
-      scope: keyword.control.else.lua
-
-    - match: elseif{{identifier_break}}
-      scope: keyword.control.elseif.lua
-
-    - match: then{{identifier_break}}
-      scope: keyword.control.then.lua
-
-    - match: until{{identifier_break}}
-      scope: keyword.control.then.lua
-
-    - match: end{{identifier_break}}
-      scope: keyword.control.end.lua
+    - match: '{{reserved_word}}'
+      scope: keyword.control.lua
 
     - match: (?=\S)
       push: expression
@@ -191,7 +182,7 @@ contexts:
     - include: else-pop
 
   function-return-list:
-    - match: ':'
+    - match: ':(?!:)'
       scope: punctuation.separator.colon.lua
       push:
         - match: '\('
@@ -213,7 +204,7 @@ contexts:
     - include: else-pop
 
   variable-type-suffix:
-    - match: '[:]'
+    - match: ':(?!:)'
       scope: punctuation.accessor.lua
       push: type-expression
     - match: '(?=\<)'
@@ -222,13 +213,12 @@ contexts:
     - include: else-pop
 
   annotation:
-    - meta_scope: meta.generic.lua
     - match: '<'
-      scope: punctuation.definition.annotation punctuation.definition.generic.begin.lua
+      scope: punctuation.definition.annotation.begin.lua
       set:
         - meta_scope: meta.annotation.lua
         - match: '>'
-          scope: punctuation.definition.annotation punctuation.definition.generic.end.lua
+          scope: punctuation.definition.annotation.end.lua
           pop: true
         - match: ','
           scope: punctuation.separator.comma.lua
@@ -282,32 +272,13 @@ contexts:
     - match: if{{identifier_break}}
       scope: keyword.control.conditional.lua
       push:
-        - - include: end
-          - match: elseif{{identifier_break}}
-            scope: keyword.control.conditional.lua
-            push:
-              - if-then
-              - expression
-          - match: else{{identifier_break}}
-            scope: keyword.control.conditional.lua
-            push: if-block
-
         - if-then
         - expression
 
     - match: switch{{identifier_break}}
       scope: keyword.control.conditional.lua
       push:
-        - - include: end
-          - match: case{{identifier_break}}
-            scope: keyword.control.conditional.lua
-            push:
-              - if-then
-              - expression
-          - match: else{{identifier_break}}
-            scope: keyword.control.conditional.lua
-            push: if-block
-
+        - case-block
         - expression
 
     - match: while{{identifier_break}}
@@ -352,13 +323,11 @@ contexts:
     - match: '::'
       scope: punctuation.definition.label.begin.lua
       push:
+        - match: '::'
+          scope: punctuation.definition.label.end.lua
+          pop: true
         - match: '{{identifier}}'
           scope: entity.name.label.lua
-          set:
-            - match: '::'
-              scope: punctuation.definition.label.end.lua
-              pop: true
-            - include: else-pop
         - include: else-pop
 
     - match: goto{{identifier_break}}
@@ -368,6 +337,25 @@ contexts:
           scope: variable.label.lua
           pop: true
         - include: else-pop
+
+  case-then:
+    - match: then{{identifier_break}}
+      scope: keyword.control.conditional.lua
+      set: case-block
+    - include: else-pop
+
+  case-block:
+    - meta_scope: meta.block.lua
+    - include: end
+    - match: case{{identifier_break}}
+      scope: keyword.control.conditional.lua
+      set:
+        - case-then
+        - expression
+    - match: else{{identifier_break}}
+      scope: keyword.control.conditional.lua
+      set: case-block
+    - include: statements
 
   if-then:
     - match: then{{identifier_break}}
@@ -511,7 +499,7 @@ contexts:
       push: expression-begin
 
   accessor:
-    - match: '[.:]'
+    - match: '(?:\.(?!\.)|:(?!\:))'
       scope: punctuation.accessor.lua
       push: property
     - include: array-index-accessor
@@ -645,9 +633,9 @@ contexts:
       pop: true
 
   typed-variable:
-    - match: '{{identifier}}(?=\s*[.])'
+    - match: '{{identifier}}(?=\s*\.)'
       scope: meta.property.lua
-    - match: '[.]'
+    - match: '\.'
       scope: punctuation.accessor.lua
     - match: '{{identifier}}'
       scope: variable.other.lua
@@ -773,7 +761,7 @@ contexts:
         - match: '{{identifier}}(?=\s*:)'
           scope: meta.key.lua string.unquoted.key.lua
           push:
-            - match: ':'
+            - match: ':(?!:)'
               scope: punctuation.separator.colon.lua
             - match: (?=\S)
               set: type-expression
