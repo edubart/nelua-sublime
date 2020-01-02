@@ -613,7 +613,7 @@ contexts:
           |next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|select
           |setmetatable|tonumber|tostring|type|xpcall
           |require|getfenv|module|setfenv|unpack
-        ){{identifier_break}}
+        ){{function_call_ahead}}
       scope: support.function.builtin.lua
       pop: true
 
@@ -765,9 +765,6 @@ contexts:
               scope: punctuation.separator.colon.lua
             - match: (?=\S)
               set: type-expression
-
-        - match: '{{identifier}}'
-          scope: meta.key.lua string.unquoted.key.lua
 
         - match: =
           scope: punctuation.separator.key-value.lua
