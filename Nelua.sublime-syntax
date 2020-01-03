@@ -130,7 +130,7 @@ contexts:
       scope: punctuation.terminator.statement.lua
 
     - match: function{{identifier_break}}
-      scope: storage.type.function.lua keyword.control.function.lua
+      scope: storage.type.function.lua keyword.declaration.function.lua
       push:
         - function-meta
         - block-contents
@@ -150,11 +150,11 @@ contexts:
       push: expression-list
 
     - match: local{{identifier_break}}
-      scope: storage.modifier.lua keyword.control.local.lua
+      scope: storage.modifier.lua keyword.declaration.local.lua
       push: typed-declaration-list
 
     - match: global{{identifier_break}}
-      scope: storage.modifier.lua keyword.control.global.lua
+      scope: storage.modifier.lua keyword.declaration.global.lua
       push: typed-declaration-list
 
     - match: '{{reserved_word}}'
@@ -524,7 +524,7 @@ contexts:
       scope: meta.property.lua entity.name.function.lua
       pop: true
     - match: '{{identifier}}{{function_call_ahead}}'
-      scope: meta.property.lua variable.function.lua
+      scope: meta.property.lua meta.function-call.lua variable.function.lua
       pop: true
     - match: '{{metaproperty}}'
       scope: meta.property.lua support.other.metaproperty.lua
@@ -536,7 +536,7 @@ contexts:
     - include: else-pop
 
   function-arguments-meta:
-    - meta_scope: meta.function-call.arguments.lua
+    - meta_scope: meta.function.parameters.lua
     - include: immediately-pop
 
   function-arguments:
@@ -614,7 +614,7 @@ contexts:
           |setmetatable|tonumber|tostring|type|xpcall
           |require|getfenv|module|setfenv|unpack
         ){{function_call_ahead}}
-      scope: support.function.builtin.lua
+      scope: meta.function-call.lua support.function.builtin.lua
       pop: true
 
     - include: builtin-modules
@@ -625,7 +625,7 @@ contexts:
       pop: true
 
     - match: '{{identifier}}{{function_call_ahead}}'
-      scope: variable.function.lua
+      scope: meta.function-call.lua variable.function.lua
       pop: true
 
     - match: '{{identifier}}'
@@ -775,7 +775,7 @@ contexts:
 
   function-literal:
     - match: function{{identifier_break}}
-      scope: storage.type.function.lua keyword.control.function.lua
+      scope: storage.type.function.lua keyword.declaration.function.lua
       set:
         - function-meta
         - block-contents
