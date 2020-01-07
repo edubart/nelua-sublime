@@ -150,11 +150,11 @@ contexts:
       push: expression-list
 
     - match: local{{identifier_break}}
-      scope: storage.modifier.lua keyword.declaration.local.lua
+      scope: storage.modifier.lua
       push: typed-declaration-list
 
     - match: global{{identifier_break}}
-      scope: storage.modifier.lua keyword.declaration.global.lua
+      scope: storage.modifier.lua
       push: typed-declaration-list
 
     - match: '{{reserved_word}}'
@@ -536,7 +536,7 @@ contexts:
     - include: else-pop
 
   function-arguments-meta:
-    - meta_scope: meta.function.parameters.lua
+    - meta_scope: meta.function-call.arguments.lua
     - include: immediately-pop
 
   function-arguments:
