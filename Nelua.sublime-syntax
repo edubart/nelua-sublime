@@ -104,15 +104,15 @@ contexts:
         - match: \n
           scope: markup.inserted
           pop: true
-    - match: '(?=#\()'
+    - match: '(?=#\|)'
       push:
         - meta_include_prototype: false
         - meta_scope: diff.inserted
-        - match: '#\('
+        - match: '#\|'
           scope: markup.inserted
           embed: scope:source.nelua
-          escape: '(?=\)#)'
-        - match: '\)#'
+          escape: '(?=\|#)'
+        - match: '\|#'
           scope: markup.inserted
           pop: true
   end:
