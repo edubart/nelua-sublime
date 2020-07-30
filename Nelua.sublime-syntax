@@ -269,6 +269,10 @@ contexts:
       scope: keyword.control.lua
       push: block-contents
 
+    - match: defer{{identifier_break}}
+      scope: keyword.control.lua
+      push: block-contents
+
     - match: if{{identifier_break}}
       scope: keyword.control.conditional.lua
       push:
