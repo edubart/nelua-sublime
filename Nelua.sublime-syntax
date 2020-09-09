@@ -462,20 +462,21 @@ contexts:
     - meta_scope: meta.type.lua
     - match: '{{identifier}}(?=\s*[.])'
       scope: meta.property.lua
-    - match: '[.]'
+    - match: \.
       scope: punctuation.accessor.lua
+    - include: array-index-accessor
+    - match: '[*?]'
+      scope: keyword.operator.types.lua
     - match: '{{identifier}}'
       scope: storage.type.lua
       set:
         - include: array-index-accessor
-        - include: table-constructor
-        - include: string
+        - match: '[*?]'
+          scope: keyword.operator.types.lua
         - match: (?={{function_args_begin}})
           push:
             - function-arguments-meta
             - function-arguments
-        - match: '\*'
-          scope: keyword.operator.pointer.lua
         - include: else-pop
     - include: else-pop
 
