@@ -179,6 +179,7 @@ contexts:
           push: variable-type-suffix
         - match: \.\.\.
           scope: constant.language.lua
+          push: variable-type-suffix
     - include: else-pop
 
   function-return-list:
