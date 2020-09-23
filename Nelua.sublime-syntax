@@ -453,6 +453,7 @@ contexts:
     - include: variable
     - include: number
     - include: string
+    - include: do-expression
     - include: parenthesized-expression
     - include: table-constructor
     - include: function-literal
@@ -662,6 +663,12 @@ contexts:
         1: punctuation.definition.numeric.base.lua
       pop: true
 
+    - match: (0[Bb])[01]+
+      scope: constant.numeric.integer.binary.lua
+      captures:
+        1: punctuation.definition.numeric.base.lua
+      pop: true
+
     - match: \d+(?:(\.)\d*{{dec_exponent}}?|{{dec_exponent}})|(\.)\d+{{dec_exponent}}?
       scope: constant.numeric.float.decimal.lua
       captures:
@@ -726,6 +733,19 @@ contexts:
       pop: true
     - match: \\.
       scope: invalid.illegal.invalid-escape.lua
+
+  do-expression:
+    - match: (\()\s*(do)
+      captures:
+        1: punctuation.section.group.begin.lua
+        2: keyword.control.do.lua
+      set:
+        - match: (end)\s*(\))
+          captures:
+            1: keyword.control.end.lua
+            2: punctuation.section.group.begin.lua
+          pop: true
+        - include: statements
 
   parenthesized-expression:
     - match: \(
