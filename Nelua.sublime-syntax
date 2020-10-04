@@ -182,6 +182,27 @@ contexts:
           push: variable-type-suffix
     - include: else-pop
 
+  function-type-parameter-list:
+    - match: \(
+      scope: punctuation.section.group.begin.lua
+      set:
+        - meta_scope: meta.group.lua
+        - match: \)
+          scope: punctuation.section.group.end.lua
+          set: function-return-list
+        - match: ','
+          scope: punctuation.separator.comma.lua
+        - include: reserved-word-pop
+        - match: '{{identifier}}(?=:)'
+          scope: variable.parameter.function.lua
+          push: variable-type-suffix
+        - match: '{{identifier}}'
+          scope: storage.type.lua
+        - match: \.\.\.
+          scope: constant.language.lua
+          push: variable-type-suffix
+    - include: else-pop
+
   function-return-list:
     - match: ':(?!:)'
       scope: punctuation.separator.colon.lua
@@ -469,6 +490,10 @@ contexts:
     - include: array-index-accessor
     - match: '[*?]'
       scope: keyword.operator.types.lua
+    - match: function{{identifier_break}}
+      scope: storage.type.function.lua keyword.declaration.function.lua
+      set:
+        - function-type-parameter-list
     - match: '{{identifier}}'
       scope: storage.type.lua
       set:
