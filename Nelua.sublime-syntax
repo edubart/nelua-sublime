@@ -304,7 +304,10 @@ contexts:
     - match: switch{{identifier_break}}
       scope: keyword.control.conditional.lua
       push:
-        - case-block
+        - - match: do{{identifier_break}}
+            scope: keyword.control.lua
+          - include: else-pop
+        - case-then
         - expression
 
     - match: while{{identifier_break}}
