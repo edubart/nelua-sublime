@@ -182,6 +182,10 @@ contexts:
           push: variable-type-suffix
     - include: else-pop
 
+  function-type-meta:
+    - meta_scope: meta.function-type.lua
+    - include: immediately-pop
+
   function-type-parameter-list:
     - match: \(
       scope: punctuation.section.group.begin.lua
@@ -192,7 +196,7 @@ contexts:
           set: function-return-list
         - match: ','
           scope: punctuation.separator.comma.lua
-        - include: reserved-word-pop
+        - include: reserved-word-expression-pop
         - match: '{{identifier}}(?=:)'
           scope: variable.parameter.function.lua
           push: variable-type-suffix
@@ -201,6 +205,8 @@ contexts:
         - match: \.\.\.
           scope: constant.language.lua
           push: variable-type-suffix
+        - match: (?=\S)
+          push: type-expression
     - include: else-pop
 
   function-return-list:
@@ -486,28 +492,48 @@ contexts:
 
   type-expression:
     - meta_scope: meta.type.lua
-    - match: '{{identifier}}(?=\s*[.])'
-      scope: meta.property.lua
-    - match: \.
-      scope: punctuation.accessor.lua
     - include: array-index-accessor
     - match: '[*?]'
       scope: keyword.operator.types.lua
+    - match: \.
+      scope: punctuation.accessor.lua
+    - match: '{{identifier}}(?=\s*[.])'
+      scope: meta.property.lua
     - match: function{{identifier_break}}
       scope: storage.type.function.lua keyword.declaration.function.lua
       set:
+        - function-type-meta
         - function-type-parameter-list
     - match: '{{identifier}}'
       scope: storage.type.lua
       set:
-        - include: array-index-accessor
-        - match: '[*?]'
-          scope: keyword.operator.types.lua
         - match: (?={{function_args_begin}})
           push:
-            - function-arguments-meta
-            - function-arguments
+            - type-arguments-meta
+            - type-arguments
         - include: else-pop
+    - match: (?=\S)
+      set: expression
+
+  type-arguments-meta:
+    - meta_scope: meta.type-call.arguments.lua
+    - include: immediately-pop
+
+  type-arguments:
+    - include: string
+    - include: table-constructor
+    - match: \(
+      scope: punctuation.section.group.begin.lua
+      set:
+        - meta_scope: meta.group.lua
+        - match: \)
+          scope: punctuation.section.group.end.lua
+          pop: true
+        - match: ','
+          scope: punctuation.separator.comma.lua
+        - include: reserved-word-expression-pop
+        - match: (?=\S)
+          push: type-expression
     - include: else-pop
 
   infix-operator:
