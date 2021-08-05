@@ -162,7 +162,7 @@ contexts:
       scope: storage.modifier.lua
       push: typed-declaration-list
 
-    - match: '{{reserved_word}}'
+    - match: '{{reserved_word_statement}}'
       scope: keyword.control.lua
 
     - match: (?=\S)
@@ -865,6 +865,9 @@ contexts:
           push:
             - clear_scopes: 1
             - meta_scope: meta.mapping.key.lua
+            - match: (?:{{identifier}})(?=\s*=\s*function\b)
+              scope: entity.name.function.lua
+              pop: 1
             - match: '{{identifier}}'
               scope: string.unquoted.key.lua
               pop: 1
