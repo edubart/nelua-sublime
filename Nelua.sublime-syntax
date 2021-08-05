@@ -28,7 +28,7 @@ variables:
   identifier_raw: (?:{{identifier_start}}{{identifier_char}}*)
   identifier: (?:(?!{{reserved_word}}){{identifier_raw}})
 
-  trailing_expression_char: '[,\]})]'
+  trailing_expression_char: '[$,\]})]'
 
   function_args_begin: (?:\(|"|'|\[=*\[|\{)
   function_call_ahead: (?=\s*{{function_args_begin}})
@@ -701,6 +701,8 @@ contexts:
     - match: '{{identifier}}'
       scope: variable.other.lua
       set: variable-type-suffix
+    - match: (?=\S)
+      set: variable-type-suffix
 
   number:
     - match: (0[Xx])(\h*(?:(\.)\h*{{hex_exponent}}?|{{hex_exponent}}))
@@ -891,7 +893,7 @@ contexts:
 
   function-literal:
     - match: function{{identifier_break}}
-      scope: keyword.declaration.function.lua
+      scope: storage.type.function.lua keyword.declaration.function.lua
       set:
         - function-meta
         - block-contents
