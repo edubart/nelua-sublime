@@ -21,19 +21,6 @@ variables:
       local|or|repeat|return|then|until|while
       |switch|case|continue|global|defer
     ){{identifier_break}})
-  metamethod: |- # http://lua-users.org/wiki/MetatableEvents
-    (?x:__(?:
-      # special
-      index|newindex|call|tostring|len|i?pairs|gc
-      # math operators
-      |unm|add|sub|mul|i?div|mod|pow|concat
-      # bitwise operators
-      |band|bor|bxor|bnot|shl|shr
-      # comparison
-      |eq|lt|le
-    ){{identifier_break}})
-  # __metatable and __mode don't use functions
-  metaproperty: (?:__(?:metatable|mode){{identifier_break}})
 
   identifier_start: '[A-Za-z_]'
   identifier_char: '[A-Za-z0-9_]'
@@ -305,9 +292,6 @@ contexts:
   function-name-property:
     - match: '{{identifier}}(?=\s*[.:])'
       scope: meta.property.lua
-      pop: 1
-    - match: '{{metamethod}}'
-      scope: meta.property.lua entity.name.function.lua support.function.metamethod.lua
       pop: 1
     - match: '{{identifier}}'
       scope: meta.property.lua entity.name.function.lua
@@ -606,17 +590,11 @@ contexts:
           push: expression
 
   property:
-    - match: '{{metamethod}}{{function_assignment_ahead}}'
-      scope: meta.property.lua entity.name.function.lua support.function.metamethod.lua
-      pop: 1
     - match: '{{identifier}}{{function_assignment_ahead}}'
       scope: meta.property.lua entity.name.function.lua
       pop: 1
     - match: '{{identifier}}{{function_call_ahead}}'
       scope: meta.property.lua meta.function-call.lua variable.function.lua
-      pop: 1
-    - match: '{{metaproperty}}'
-      scope: meta.property.lua support.other.metaproperty.lua
       pop: 1
     - match: '{{identifier}}'
       scope: meta.property.lua
