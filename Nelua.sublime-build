@@ -1,5 +1,5 @@
 {
     "cmd": ["nelua", "$file"],
-    "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+    "file_regex": "^(?:nelua:)?[\t ](...*?):([0-9]*):?([0-9]*)",
     "selector": "source.nelua"
 }
