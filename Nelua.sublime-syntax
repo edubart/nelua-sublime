@@ -158,11 +158,7 @@ contexts:
       scope: keyword.control.return.lua
       push: expression-list
 
-    - match: local{{identifier_break}}
-      scope: storage.modifier.lua
-      push: typed-declaration-list
-
-    - match: global{{identifier_break}}
+    - match: (?:local|global){{identifier_break}}
       scope: storage.modifier.lua
       push: typed-declaration-list
 
@@ -698,6 +694,8 @@ contexts:
       scope: meta.property.lua
     - match: '\.'
       scope: punctuation.accessor.lua
+    - match: '{{identifier}}(?=\s*(:\s*type{{identifier_break}}|=\s*\@))'
+      scope: entity.name.type variable.type.lua
     - match: '{{identifier}}'
       scope: variable.other.lua
       set: variable-type-suffix
