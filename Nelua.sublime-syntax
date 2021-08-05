@@ -28,7 +28,7 @@ variables:
   identifier_raw: (?:{{identifier_start}}{{identifier_char}}*)
   identifier: (?:(?!{{reserved_word}}){{identifier_raw}})
 
-  trailing_expression_char: '[$,\]})]'
+  trailing_expression_char: '[:$,\]})]'
 
   function_args_begin: (?:\(|"|'|\[=*\[|\{)
   function_call_ahead: (?=\s*{{function_args_begin}})
@@ -271,7 +271,7 @@ contexts:
 
   function-name-end:
     - meta_scope: meta.name.function
-    - match: '[.:]'
+    - match: '[.:](?![.:])'
       scope: punctuation.accessor.lua
       push: function-name-property
     - include: else-pop
@@ -362,11 +362,9 @@ contexts:
       push:
         - match: '{{identifier}}'
           scope: entity.name.label.lua
-          set:
-            - match: '::'
-              scope: punctuation.definition.label.end.lua
-              pop: 1
-            - include: else-pop
+        - match: '::'
+          scope: punctuation.definition.label.end.lua
+          pop: 1
         - include: else-pop
 
     - match: goto{{identifier_break}}
@@ -568,7 +566,7 @@ contexts:
       push: expression-begin
 
   accessor:
-    - match: '[.:]'
+    - match: '[.:](?![.:])'
       scope: punctuation.accessor.lua
       push: property
     - include: array-index-accessor

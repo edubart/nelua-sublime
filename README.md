@@ -1,10 +1,10 @@
 # Nelua Sublime
 
-Nelua syntax highlighting for Sublime Text.
+Nelua syntax highlighting for [Sublime Text](https://www.sublimetext.com/) text editor.
 
 ## Features
 
-* Complete syntax highlight for Nelua source files
+* Complete syntax highlight for Nelua files
 * Goto symbol (Ctrl + R)
 * Goto definition (F12)
 * Indentation rules
