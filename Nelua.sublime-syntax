@@ -722,7 +722,6 @@ contexts:
       scope: punctuation.accessor.lua
     - match: '{{identifier}}'
       scope: variable.other.lua
-    - match: (?=\S)
       set: variable-type-suffix
 
   number:
