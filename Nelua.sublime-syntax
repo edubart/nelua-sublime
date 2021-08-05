@@ -731,32 +731,38 @@ contexts:
         1: constant.numeric.base.lua
         2: constant.numeric.value.lua
         3: punctuation.separator.decimal.lua
-      pop: 1
+      set: number-suffix
 
     - match: (0[Xx])(\h+)
       scope: meta.number.integer.hexadecimal.lua
       captures:
         1: constant.numeric.base.lua
         2: constant.numeric.value.lua
-      pop: 1
+      set: number-suffix
 
     - match: (0[Bb])([01]+)
       scope: meta.number.integer.hexadecimal.lua
       captures:
         1: constant.numeric.base.lua
         2: constant.numeric.value.lua
-      pop: 1
+      set: number-suffix
 
     - match: \d+(?:(\.)\d*{{dec_exponent}}?|{{dec_exponent}})|(\.)\d+{{dec_exponent}}?
       scope: meta.number.float.decimal.lua constant.numeric.value.lua
       captures:
         1: punctuation.separator.decimal.lua
         2: punctuation.separator.decimal.lua
-      pop: 1
+      set: number-suffix
 
     - match: \d+
       scope: meta.number.integer.decimal.lua constant.numeric.value.lua
+      set: number-suffix
+
+  number-suffix:
+    - match: '_{{identifier}}'
+      scope: constant.numeric.suffix.lua markup.italic
       pop: 1
+    - include: else-pop
 
   string:
     - include: single-quoted-string
@@ -774,7 +780,7 @@ contexts:
     - include: string-content
     - match: \'
       scope: punctuation.definition.string.end.lua
-      pop: 1
+      set: string-suffix
 
   double-quoted-string:
     - match: \"
@@ -824,6 +830,12 @@ contexts:
       pop: 1
     - match: \\.
       scope: invalid.illegal.invalid-escape.lua
+
+  string-suffix:
+    - match: '_{{identifier}}'
+      scope: constant.string.suffix.lua storage.type.lua markup.italic
+      pop: 1
+    - include: else-pop
 
   do-expression:
     - match: (\()\s*(do){{identifier_break}}
