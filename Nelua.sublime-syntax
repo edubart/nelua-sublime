@@ -256,12 +256,12 @@ contexts:
         - match: ','
           scope: punctuation.separator.comma.lua
         - match: '{{identifier}}{{function_call_ahead}}'
-          scope: variable.annotation
+          scope: variable.annotation.lua entity.other.attribute-name
           push:
             - function-arguments-meta
             - function-arguments
         - match: '{{identifier}}'
-          scope: variable.annotation
+          scope: variable.annotation.lua entity.other.attribute-name
         - include: else-pop
     - include: else-pop
 
@@ -695,7 +695,7 @@ contexts:
     - match: '\.'
       scope: punctuation.accessor.lua
     - match: '{{identifier}}(?=\s*(:\s*type{{identifier_break}}|=\s*\@))'
-      scope: entity.name.type variable.type.lua
+      scope: storage.type.lua variable.type.lua
     - match: '{{identifier}}'
       scope: variable.other.lua
       set: variable-type-suffix

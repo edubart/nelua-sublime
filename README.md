@@ -4,10 +4,11 @@ Nelua syntax highlighting for Sublime Text.
 
 ## Features
 
-* Syntax highlight for Nelua source files
-* View file symbols
+* Complete syntax highlight for Nelua source files
+* Goto symbol (Ctrl + R)
+* Goto definition (F12)
 * Indentation rules
-* Run files with "Build"
+* Run `.nelua` files on build
 
 ## Installing
 
