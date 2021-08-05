@@ -375,7 +375,7 @@ contexts:
 
           - include: else-pop
 
-        - expression-list
+        - typed-declaration-list
 
     - match: '::'
       scope: punctuation.definition.label.begin.lua
@@ -448,9 +448,9 @@ contexts:
         - typed-declaration-begin
 
   typed-declaration-end:
+    - match: (?==(?!=))
+      set: expression-list
     - include: expression-end
-    - match: (?=;)
-      pop: 1
     - include: else-pop
 
   typed-declaration-list-end:
