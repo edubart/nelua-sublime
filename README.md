@@ -14,4 +14,8 @@ Nelua syntax highlighting for [Sublime Text](https://www.sublimetext.com/) text 
 
 ## Installing
 
+Use Sublime's [package manager](https://packagecontrol.io/) to install, search for "Nelua".
+
+## Installing manually
+
 Clone this repository into ~/.config/sublime-text-3/Packages/.
