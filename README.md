@@ -14,7 +14,12 @@ Nelua syntax highlighting for [Sublime Text](https://www.sublimetext.com/) text 
 
 ## Installing
 
-Use Sublime's [package manager](https://packagecontrol.io/) to install, search for "Nelua".
+Use Sublime's [package manager](https://packagecontrol.io/) to install:
+
+1. Press Ctrl+Shift+P to access sublime commands.
+2. Type "Package Control: Install package"
+3. Search for "nelua"
+4. Type enter to install.
 
 ## Installing manually
 
