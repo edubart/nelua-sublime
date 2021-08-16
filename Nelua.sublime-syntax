@@ -709,6 +709,14 @@ contexts:
         3: punctuation.separator.decimal.lua
       set: number-suffix
 
+    - match: (0[Bb])([01]*(?:(\.)[01]*{{hex_exponent}}?|{{hex_exponent}}))
+      scope: meta.number.float.binary.lua
+      captures:
+        1: constant.numeric.base.lua
+        2: constant.numeric.value.lua
+        3: punctuation.separator.decimal.lua
+      set: number-suffix
+
     - match: (0[Xx])(\h+)
       scope: meta.number.integer.hexadecimal.lua
       captures:
@@ -717,7 +725,7 @@ contexts:
       set: number-suffix
 
     - match: (0[Bb])([01]+)
-      scope: meta.number.integer.hexadecimal.lua
+      scope: meta.number.integer.binary.lua
       captures:
         1: constant.numeric.base.lua
         2: constant.numeric.value.lua
