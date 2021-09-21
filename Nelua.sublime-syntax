@@ -314,8 +314,10 @@ contexts:
       push:
         - - match: do{{identifier_break}}
             scope: keyword.control.lua
+            push:
+              - case-block
           - include: else-pop
-        - case-then
+        - case-block
         - expression
 
     - match: while{{identifier_break}}
