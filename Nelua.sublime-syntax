@@ -685,6 +685,10 @@ contexts:
       scope: meta.function-call.lua variable.function.lua
       pop: 1
 
+    - match: '{{identifier}}\!{{function_call_ahead}}'
+      scope: meta.function-call.lua variable.function.lua markup.inserted markup.italic
+      pop: 1
+
     - match: '{{identifier}}'
       scope: variable.other.lua
       pop: 1
